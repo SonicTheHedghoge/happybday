@@ -120,8 +120,21 @@
     box-shadow:3px 3px 0 #000;margin:6px 0;transform:rotate(-1deg);font-size:18px}
   .sign.oneway{background:#2a4a6b;color:#fff;transform:rotate(1deg)}
   .tv{border:8px solid #c0c0c0;outline:3px solid #000;background:#111;color:#0f0;padding:10px;
-    font-size:18px;min-height:130px;box-shadow:4px 4px 0 #000}
-  .tv-screen{animation:rainbow 8s linear infinite}
+    font-size:18px;min-height:130px;box-shadow:4px 4px 0 #000;position:relative;overflow:hidden}
+  .tv-screen{font-size:16px;margin-top:8px}
+  .tvset{position:relative;width:100%;max-width:430px;margin:0 auto}
+  .tvset-frame{width:100%;display:block;position:relative;z-index:1}
+  .tvset-video{position:absolute;z-index:2;left:8%;top:11%;width:69%;height:75%;object-fit:cover;border-radius:14px;background:#000}
+  .tvset-scan{position:absolute;z-index:3;left:8%;top:11%;width:69%;height:75%;pointer-events:none;border-radius:14px;
+    background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.28) 2px 3px)}
+  .tv-cap{font-size:15px;color:#ffeb3b;margin-top:6px;letter-spacing:1px}
+  .tv-ctrl{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+  .tv-ctrl .btn{font-size:18px;padding:4px 12px;margin:2px}
+  .lyric-overlay{position:absolute;z-index:4;left:8%;right:23%;bottom:16%;text-align:center;pointer-events:none;
+    font-family:'Gochi Hand',cursive;font-size:clamp(13px,2.6vw,19px);line-height:1.25;color:#fff;
+    text-shadow:0 0 6px #ff9ecf,0 0 14px #ff9ecf,2px 2px 0 #000,-1px -1px 0 #000;transition:opacity .18s}
+  .lyric-overlay.pop{animation:lyricpop .3s ease}
+  @keyframes lyricpop{from{transform:scale(.92);opacity:.3}to{transform:scale(1);opacity:1}}
   .gif-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
   .gif{font-size:34px;background:#fff;border:2px solid #000;box-shadow:3px 3px 0 #000;padding:4px 8px;
     animation:floaty 2.4s infinite}
@@ -233,8 +246,22 @@
 
       <div>
         <div class="card">
-          <h2>WEBRINGS ♡ wishes</h2>
-          <div class="tv"><div class="tv-screen" id="tvText">▶ loading birthday wishes...<br>★ you are loved ★<br>★ you survived winter ★<br>★ invincible summer inside ★</div></div>
+          <h2>BDAY TV ♡</h2>
+          <div class="tv">
+            <div class="tvset">
+              <video id="clipVideo" class="tvset-video" src="assets/clip.mp4" muted loop playsinline preload="metadata"></video>
+              <div class="tvset-scan"></div>
+              <img src="assets/tv.gif" class="tvset-frame pix" alt="retro tv">
+              <div class="lyric-overlay" id="lyric">♪ press play ♪</div>
+            </div>
+            <div class="tv-screen" id="tvText">▶ loading birthday wishes...<br>★ you are loved ★</div>
+            <div class="tv-ctrl">
+              <button class="btn" id="clipPlay">▶ play</button>
+              <button class="btn" id="clipBack">⏮ -5s</button>
+              <button class="btn" id="clipRestart">↺ restart</button>
+            </div>
+            <div class="tv-cap" id="tvCap">♫ sound = bday-song.mp3 (clip always muted) ♫</div>
+          </div>
           <div class="btn-row">
             <span class="b8831">♡ bday girl ♡</span><span class="b8831">★ 100% loved ★</span><span class="b8831">✧ winter survivor ✧</span>
           </div>
@@ -246,7 +273,8 @@
           <h2>a letter 4 u</h2>
           <p class="letter">ON THIS DAY OF SHADOWS AND MOONBEAMS, MAY YOUR HEART FIND SOLACE IN THE EMBRACE OF THE NIGHT<br><br>happy bday broski<br><br>— by ur Tunisian amigo ♡<br><br>P.S. <span class="blink">✧ make a wish ✧</span></p>
           <div>visitors: <span class="counter" id="counter">000013</span></div>
-          <div style="margin-top:8px"><button class="btn" id="musicBtn">♪ play bday tune</button></div>
+          <div style="margin-top:8px"><button class="btn" id="musicBtn">♪ play bday song</button>
+          <audio id="bdayAudio" src="assets/bday-song.mp3" loop preload="auto"></audio></div>
         </div>
       </div>
     </div>
@@ -262,6 +290,7 @@
   </div>
 </div>
 
+<script src="assets/lyrics.js"></script>
 <script>
 // stars / sparkles
 const stars = document.getElementById('stars');
@@ -288,7 +317,7 @@ function burst(n){const c=['#ff9ecf','#ffeb3b','#7ec8e3','#b6ff5c','#fff','#d92b
 (function loop(){ctx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.life>0);for(let p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.r+=p.vr;p.life--;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);ctx.restore();}requestAnimationFrame(loop);})();
 document.getElementById('cake').onclick=(e)=>{burst(120);pop();tv('★ wish made!! ★\n★ it will come true ★');};
 // tv rotate messages
-const wishes=['▶ you are so loved ♡\n★ happy birthday ★','▶ winter is over!\n★ invincible summer loading...','▶ centipede girl fact:\n★ 100 legs, 0 flaws ★','▶ PRINCE ST → CAKE ST →\n★ follow the sparkles ★'];let wi=0;
+const wishes=['▶ you are so loved ♡\n★ happy birthday ★','▶ winter is starting...\n★ but ur invincible summer stays ★','▶ centipede girl fact:\n★ 100 legs, 0 flaws ★','▶ PRINCE ST → CAKE ST →\n★ follow the sparkles ★'];let wi=0;
 function tv(t){document.getElementById('tvText').innerText=t||wishes[wi++%wishes.length]}
 setInterval(()=>{if(!main.classList.contains('hidden'))tv()},3500);
 // counter
@@ -297,9 +326,37 @@ document.getElementById('counter').textContent=String(c).padStart(6,'0');
 // tiny pop sound with webaudio
 let ac=null;
 function pop(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';o.frequency.value=660;g.gain.value=.08;o.start();o.frequency.exponentialRampToValueAtTime(990,ac.currentTime+.12);o.stop(ac.currentTime+.15);}catch(e){}}
-// birthday tune (happy birthday melody, chiptune)
+// ONE synced show: song + clip always play/pause together (clip muted, no volume)
 let playing=false;
-document.getElementById('musicBtn').onclick=function(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(playing){ac.suspend();playing=false;this.textContent='♪ play bday tune';return;}ac.resume();playing=true;this.textContent='♫ playing... (tap to stop)';const notes=[261.6,261.6,293.7,329.6,329.6,293.7,261.6,392,329.6,329.6,293.7,293.7,261.6,523.2,493.9,329.6,329.6,293.7,440,392,329.6,293.7,261.6];let t=ac.currentTime+.05;notes.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';o.frequency.value=f;g.gain.value=.06;const d=(i%7==6)?.6:.35;o.start(t);o.stop(t+d);t+=d+.02;});setTimeout(()=>{playing=false;document.getElementById('musicBtn').textContent='♪ play again'},t*1000);}catch(e){alert('music blocked by browser ♡ hum it yourself: happy birthday~!');}};
+const bdayAudio=document.getElementById('bdayAudio'),
+clipVideo=document.getElementById('clipVideo'),
+clipPlay=document.getElementById('clipPlay'),
+musicBtn=document.getElementById('musicBtn');
+clipVideo.muted=true;clipVideo.volume=0;
+function labels(){musicBtn.textContent=playing?'♫ playing... (tap to stop)':'♪ play bday song';clipPlay.textContent=playing?'⏸ pause':'▶ play';}
+function playBoth(){bdayAudio.play().then(()=>{clipVideo.play().catch(()=>{});playing=true;labels();burst(80);}).catch(()=>{alert('browser blocked audio ♡ tap again!');});}
+function pauseBoth(){bdayAudio.pause();clipVideo.pause();playing=false;labels();}
+musicBtn.onclick=()=>{playing?pauseBoth():playBoth();};
+clipPlay.onclick=()=>{playing?pauseBoth():playBoth();};
+document.getElementById('clipBack').onclick=()=>{bdayAudio.currentTime=Math.max(0,bdayAudio.currentTime-5);clipVideo.currentTime=Math.max(0,clipVideo.currentTime-5);};
+document.getElementById('clipRestart').onclick=()=>{bdayAudio.currentTime=0;clipVideo.currentTime=0;if(!playing)playBoth();else{clipVideo.play().catch(()=>{});bdayAudio.play().catch(()=>{});}};
+bdayAudio.addEventListener('ended',()=>{clipVideo.pause();playing=false;labels();lyricEl.textContent='♡ happy birthday centipede girl ♡';});
+// dreamy karaoke subtitles, synced to the song
+const lyricEl=document.getElementById('lyric');let lyricIdx=-2,lyricToken=0;
+function syncLyrics(){
+  if(typeof LYRICS==='undefined')return;
+  if(!playing)return;
+  const t=bdayAudio.currentTime;let idx=-1;
+  for(let i=0;i<LYRICS.length;i++){if(t>=LYRICS[i].start&&t<=LYRICS[i].end+0.35){idx=i;break;}}
+  if(idx===lyricIdx)return;
+  lyricIdx=idx;const my=++lyricToken;
+  lyricEl.style.opacity=0;
+  setTimeout(()=>{if(my!==lyricToken)return;
+    lyricEl.textContent=idx>=0?('♪ '+LYRICS[idx].text+' ♪'):'♪ ♪ ♪';
+    lyricEl.style.opacity=1;lyricEl.classList.remove('pop');void lyricEl.offsetWidth;lyricEl.classList.add('pop');
+  },idx>=0?140:0);
+}
+setInterval(syncLyrics,200);
 </script>
 </body>
 </html>
