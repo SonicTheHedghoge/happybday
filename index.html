@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>happy birthday centipede girl ♡</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Special+Elite&family=Gochi+Hand&display=swap');
+  :root{
+    --ink:#1a1a22;
+    --paper:#fdf6e8;
+    --paper2:#fffefb;
+    --red:#d92b2b;
+    --pink:#ff9ecf;
+    --blue:#7ec8e3;
+    --sky1:#8abde0;
+    --sky2:#cfe8f7;
+    --yellow:#ffeb3b;
+    --shadow: 4px 4px 0 #000;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;min-height:100%;background:#2b3a55;color:var(--ink);
+    font-family:'VT323',monospace; font-size:19px; overflow-x:hidden;}
+  body{
+    background:#2b3a55;
+    min-height:100vh;
+  }
+  .bg-photo{position:fixed;inset:0;z-index:0;background:url("assets/tokyo-roof.jpg") center top / cover no-repeat;
+    filter:contrast(1.15) saturate(1.25);}
+  .bg-tint{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg, rgba(106,169,214,.45) 0%, rgba(207,228,243,.15) 40%, rgba(20,28,45,.72) 100%);}
+  /* dither / halftone overlay */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.35;mix-blend-mode:multiply;
+    background-image: radial-gradient(#000 1px, transparent 1.3px);
+    background-size:4px 4px;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.12;
+    background:repeating-linear-gradient(0deg, transparent 0 2px, #000 2px 3px);
+  }
+  canvas#confetti{position:fixed;inset:0;z-index:55;pointer-events:none}
+  .stars{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+  .stars span{position:absolute;animation:twinkle 1.6s infinite alternate;font-size:18px}
+  @keyframes twinkle{from{opacity:.2;transform:scale(.8) rotate(-10deg)}to{opacity:1;transform:scale(1.2) rotate(10deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+  @keyframes wiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes spin-slow{to{transform:rotate(360deg)}}
+  @keyframes rainbow{0%{filter:hue-rotate(0)}100%{filter:hue-rotate(360deg)}}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  /* ---------- overlays (gate + quote) ---------- */
+  .overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+    padding:18px;background:rgba(20,28,45,.72) url('');backdrop-filter:blur(2px)}
+  .hidden{display:none!important}
+  .win{background:var(--paper);border:3px solid #000;box-shadow:8px 8px 0 #000, inset 0 0 0 2px #fff;
+    max-width:520px;width:100%;padding:0;transform:rotate(-1deg);position:relative}
+  .win-bar{background:#000;color:#fff;display:flex;justify-content:space-between;align-items:center;
+    padding:6px 10px;font-size:20px;letter-spacing:1px}
+  .win-bar .dots{font-size:14px}
+  .win-body{padding:22px 20px 24px;text-align:center;background:
+    repeating-linear-gradient(0deg, transparent 0 26px, rgba(0,0,0,.06) 26px 27px), var(--paper)}
+  .sticker-title{display:inline-block;background:#000;color:#fff;padding:4px 12px;margin:4px;
+    font-family:'Special Elite',monospace;box-shadow:3px 3px 0 var(--pink);transform:rotate(-2deg)}
+  .big-q{font-family:'Special Elite',monospace;font-size:clamp(28px,6vw,42px);line-height:1;margin:10px 0}
+  .bubble{display:inline-block;background:#fff;border:2px solid #000;border-radius:14px;padding:8px 12px;
+    position:relative;box-shadow:3px 3px 0 #000;font-family:'Gochi Hand',cursive}
+  .bubble::after{content:"";position:absolute;bottom:-10px;left:30px;width:14px;height:14px;background:#fff;
+    border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg)}
+  .btn{font-family:'VT323',monospace;font-size:24px;border:3px solid #000;background:#fff;
+    box-shadow:4px 4px 0 #000;padding:8px 22px;margin:8px;cursor:pointer;transition:.15s}
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #000;background:var(--yellow)}
+  .btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000}
+  .btn-yes{background:#b6ff5c}
+  .btn-yes2{background:var(--pink)}
+  .btn-proceed{background:#000;color:#ffeb3b;animation:wiggle 1s infinite}
+  .tiny{font-size:16px;opacity:.8}
+  #dodge-msg{min-height:22px;color:var(--red);font-weight:bold}
+
+  /* quote paper */
+  .notebook{background:repeating-linear-gradient(0deg, #fff 0 24px, #cfe8ff 24px 25px);
+    border-left:6px solid #ff9ecf; padding:18px 16px 18px 22px; border:2px solid #000; box-shadow:5px 5px 0 #000;
+    font-family:'Gochi Hand',cursive; font-size:22px; line-height:25px; transform:rotate(1deg)}
+  .quote-mark{font-size:48px;line-height:0}
+
+  /* ---------- main site ---------- */
+  .top-marquee{background:#000;color:#fff;overflow:hidden;white-space:nowrap;border-bottom:3px solid #000;
+    position:relative;z-index:5;font-size:20px;padding:6px 0}
+  .top-marquee-inner{display:inline-block;animation:marquee 18s linear infinite}
+  .top-marquee span{margin:0 18px}
+  .blink{animation:blink 1s steps(1) infinite}
+  .wrap{max-width:980px;margin:0 auto;padding:14px 14px 60px;position:relative;z-index:5}
+  .collage{background:rgba(253,246,232,.92);border:3px solid #000;box-shadow:8px 8px 0 #000;
+    padding:18px;position:relative;overflow:hidden}
+  .collage::before{content:"";position:absolute;inset:0;opacity:.08;pointer-events:none;
+    background-image:radial-gradient(#000 1px, transparent 1px);background-size:6px 6px}
+  .hero-title{text-align:center;margin:6px 0 2px}
+  .hero-title .line1{font-family:'Special Elite',monospace;background:#fff;border:2px solid #000;
+    display:inline-block;padding:2px 10px;transform:rotate(-3deg);box-shadow:3px 3px 0 #000}
+  .hero-title h1{font-family:'Special Elite',monospace;font-size:clamp(38px,8vw,78px);line-height:.9;margin:8px 0;
+    background:#000;color:#fff;display:inline-block;padding:6px 14px;transform:rotate(1deg);
+    text-shadow:2px 2px 0 var(--pink), -2px -2px 0 var(--blue)}
+  .hero-title .dotcom{font-family:'Special Elite',monospace;background:#fff;border:2px solid #000;
+    padding:2px 8px;transform:rotate(3deg);display:inline-block;box-shadow:3px 3px 0 #000}
+  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:14px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--paper2);border:2px solid #000;box-shadow:4px 4px 0 #000;padding:12px;position:relative}
+  .card h2{background:#000;color:#fff;display:inline-block;padding:2px 10px;margin:0 0 8px;font-size:22px;letter-spacing:1px}
+  .char-box{text-align:center;background:
+    linear-gradient(180deg,#d6ecff,#fff);border:2px dashed #000;padding:10px}
+  .char-box img{max-width:100%;height:auto;image-rendering:pixelated;animation:floaty 3s ease-in-out infinite;
+    filter:drop-shadow(4px 4px 0 #000)}
+  .char-fallback{font-size:76px;animation:bounce 1.2s infinite;display:block}
+  .led{background:#0a0a0a;color:#ff1a1a;border:3px inset #555;text-align:center;font-size:clamp(22px,5vw,34px);
+    padding:8px;letter-spacing:2px;text-shadow:0 0 8px #ff0000,0 0 18px #ff0000;animation:blink 1.4s steps(1) infinite;
+    margin:10px 0}
+  .sign{background:#e8dcc3;border:3px solid #000;padding:6px 10px;font-family:'Special Elite',monospace;
+    box-shadow:3px 3px 0 #000;margin:6px 0;transform:rotate(-1deg);font-size:18px}
+  .sign.oneway{background:#2a4a6b;color:#fff;transform:rotate(1deg)}
+  .tv{border:8px solid #c0c0c0;outline:3px solid #000;background:#111;color:#0f0;padding:10px;
+    font-size:18px;min-height:130px;box-shadow:4px 4px 0 #000}
+  .tv-screen{animation:rainbow 8s linear infinite}
+  .gif-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+  .gif{font-size:34px;background:#fff;border:2px solid #000;box-shadow:3px 3px 0 #000;padding:4px 8px;
+    animation:floaty 2.4s infinite}
+  .gif:nth-child(2n){animation-delay:.3s;transform:rotate(3deg)}
+  .gif:nth-child(3n){animation-delay:.6s}
+  .btn-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
+  .b8831{border:2px solid #000;font-size:15px;padding:3px 6px;background:linear-gradient(180deg,#fff,#c0c0ff);
+    box-shadow:2px 2px 0 #000;font-family:'VT323',monospace}
+  .cake{font-size:90px;cursor:pointer;animation:bounce 1s infinite;filter:drop-shadow(4px 4px 0 #000);background:none;border:none}
+  .cake img{width:150px;height:auto;image-rendering:pixelated}
+  .pix{image-rendering:pixelated;image-rendering:crisp-edges}
+  .bday-gif{max-width:min(340px,80vw);height:auto;animation:floaty 2.6s ease-in-out infinite;filter:drop-shadow(3px 3px 0 #000)}
+  .mini-gif{height:52px;width:auto;image-rendering:pixelated;background:#fff;border:2px solid #000;box-shadow:3px 3px 0 #000;padding:2px;animation:floaty 2.2s infinite}
+  .float-sticker{position:absolute;pointer-events:none;z-index:6;animation:floaty 3s ease-in-out infinite;filter:drop-shadow(3px 3px 0 #000)}
+  @media(max-width:760px){.float-sticker{opacity:.9;transform:scale(.75)}}
+  .letter{font-family:'Gochi Hand',cursive;font-size:20px;line-height:1.4}
+  .counter{background:#000;color:#0f0;display:inline-block;padding:4px 10px;letter-spacing:3px;border:2px inset #555}
+  footer{text-align:center;margin-top:18px;font-size:16px;background:#000;color:#fff;padding:10px;border:3px solid #000}
+  .proceed-hint{text-align:center;margin:14px}
+  /* street bg city silhouette */
+  .city{height:120px;background:
+    linear-gradient(transparent 0 20px, #1e2936 20px);
+    -webkit-mask-image:linear-gradient(#000,#000);
+    position:relative;margin-top:10px;opacity:.9}
+  .city::before{content:"🏘️🏠🏡🏘️🏚️🏠🏘️🏠🏡🏘️🏠🏘️🏡🏠🏘️";font-size:52px;position:absolute;bottom:0;left:0;right:0;
+    white-space:nowrap;overflow:hidden;filter:contrast(2) grayscale(.6)}
+</style>
+</head>
+<body>
+<div class="bg-photo"></div>
+<div class="bg-tint"></div>
+<canvas id="confetti"></canvas>
+<div class="stars" id="stars"></div>
+
+<div class="top-marquee" aria-hidden="true">
+  <div class="top-marquee-inner" id="marquee">
+    <span>✧ HAPPY BIRTHDAY CENTIPEDE GIRL ✧</span><span>♡ invincible summer ♡</span><span>★ OPEN 4EVER ★</span><span>✧ HAPPY BIRTHDAY CENTIPEDE GIRL ✧</span><span>♡ invincible summer ♡</span><span>★ OPEN 4EVER ★</span>
+  </div>
+</div>
+
+<!-- STAGE 1: GATE -->
+<div class="overlay" id="gate">
+  <div class="win">
+    <div class="win-bar"><span>✧ welcome.exe ✧</span><span class="dots">_ □ X</span></div>
+    <div class="win-body">
+      <div class="bubble">psst... are u ready to enter?? ♡</div>
+      <div class="big-q">ARE U READY<br>TO ENTER?</div>
+      <div class="tiny">* there is no wrong answer *</div>
+      <div style="margin-top:12px">
+        <button class="btn btn-yes" id="yes1">YES ♡</button>
+        <button class="btn btn-yes2" id="yes2">yes!!</button>
+      </div>
+      <div id="dodge-msg" class="tiny"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 2: QUOTE -->
+<div class="overlay hidden" id="quoteBox">
+  <div class="win" style="transform:rotate(1deg)">
+    <div class="win-bar"><span>♡ a note before cake ♡</span><span class="dots">_ □ X</span></div>
+    <div class="win-body">
+      <div class="notebook">
+        <div class="quote-mark">“</div>
+        In the depth of winter, I finally learned that within me there lay an <b>invincible summer</b>.
+        <br><br>— Albert Camus
+      </div>
+      <p class="tiny">for the centipede girl who survived her winters ♡</p>
+      <button class="btn btn-proceed" id="proceed">proceed to celebration →</button>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 3: MAIN -->
+<div class="wrap hidden" id="main">
+  <div class="collage">
+    <div class="hero-title">
+      <div><span class="line1">welcome to</span></div><br>
+      <img class="pix bday-gif" src="assets/happy-birthday.gif" alt="HAPPY BIRTHDAY" onerror="this.style.display='none'">
+      <h1>HAPPY BIRTHDAY<br>CENTIPEDE GIRL</h1>
+      <div><span class="dotcom">★ centipede-girl.com ★ est. ur best year</span></div>
+    </div>
+
+    <div class="bubble" style="margin:10px auto;display:block;max-width:300px">please click the cake to make a wish!! ♡</div>
+
+    <div class="gif-row" aria-hidden="true">
+      <img class="mini-gif pix" src="assets/butterfly.gif" alt="butterfly" onerror="this.outerHTML='🦋'">
+      <img class="mini-gif pix" src="assets/cake.gif" alt="cake" onerror="this.outerHTML='🎂'">
+      <img class="mini-gif pix" src="assets/sword.gif" alt="sparkle sword" onerror="this.outerHTML='✨'">
+      <img class="mini-gif pix" src="assets/happy-birthday.gif" alt="happy birthday" onerror="this.outerHTML='💖'">
+      <div class="gif">🍓</div><div class="gif">💌</div><div class="gif">🌙</div><div class="gif">💖</div>
+    </div>
+
+    <div class="grid">
+      <div class="card char-box">
+        <h2>★ birthday star ★</h2><br>
+        <!-- your chibi art -->
+        <img src="assets/centipede-girl.jpg" alt="centipede girl - red hair chibi in black hoodie" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/centipede-girl.png'}else{this.style.display='none';document.getElementById('charFallback').style.display='block'}">
+        <span id="charFallback" class="char-fallback" style="display:none">🐛👧🎀<br>✧ centipede girl ✧</span>
+        <img class="float-sticker pix" src="assets/butterfly.gif" alt="" onerror="this.style.display='none'" style="top:8px;right:10px;width:90px">
+        <img class="float-sticker pix" src="assets/sword.gif" alt="" onerror="this.style.display='none'" style="bottom:120px;left:6px;width:70px;transform:rotate(-12deg)">
+        <p class="letter">she has 100 legs and 100 reasons to be loved!!<br>click me? → <b>u already did ♡</b></p>
+        <button class="cake" id="cake" title="make a wish">
+          <img class="pix" src="assets/cake.gif" alt="🎂 pink birthday cake - click to wish" onerror="this.outerHTML='🎂'">
+        </button>
+        <div class="tiny">psst: click cake = confetti + wish</div>
+        <div class="led">HAPPY BDAY 24 HOURS ♡</div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>WEBRINGS ♡ wishes</h2>
+          <div class="tv"><div class="tv-screen" id="tvText">▶ loading birthday wishes...<br>★ you are loved ★<br>★ you survived winter ★<br>★ invincible summer inside ★</div></div>
+          <div class="btn-row">
+            <span class="b8831">♡ bday girl ♡</span><span class="b8831">★ 100% loved ★</span><span class="b8831">✧ winter survivor ✧</span>
+          </div>
+          <div class="sign oneway">ONE WAY → TO CAKE 🍰</div>
+          <div class="sign">LEFT LANE MUST TURN PRETTY 💅</div>
+          <div class="sign" style="background:#d92b2b;color:#fff;border-radius:50%;text-align:center">CERTIFIED ★ BDAY GIRL ★ NOT YET RATED, ALREADY ADORED</div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h2>a letter 4 u</h2>
+          <p class="letter">ON THIS DAY OF SHADOWS AND MOONBEAMS, MAY YOUR HEART FIND SOLACE IN THE EMBRACE OF THE NIGHT<br><br>happy bday broski<br><br>— by ur Tunisian amigo ♡<br><br>P.S. <span class="blink">✧ make a wish ✧</span></p>
+          <div>visitors: <span class="counter" id="counter">000013</span></div>
+          <div style="margin-top:8px"><button class="btn" id="musicBtn">♪ play bday tune</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gif-row" aria-hidden="true">
+      <img class="mini-gif pix" src="assets/cake.gif" alt="" onerror="this.outerHTML='🧁'">
+      <img class="mini-gif pix" src="assets/butterfly.gif" alt="" onerror="this.outerHTML='🌷'">
+      <div class="gif">🕸️</div><div class="gif">⭐</div><div class="gif">📼</div><div class="gif">💿</div><div class="gif">🪩</div>
+    </div>
+
+    <div class="city" aria-hidden="true"></div>
+    <footer>made with ♡ for centipede girl — dreamy + vintage + cool forever | <span id="date"></span> | open 24 hours</footer>
+  </div>
+</div>
+
+<script>
+// stars / sparkles
+const stars = document.getElementById('stars');
+const emojis = ['✧','♡','★','✿','｡','⋆','✩','❀'];
+for(let i=0;i<28;i++){let s=document.createElement('span');s.textContent=emojis[i%emojis.length];
+s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';s.style.animationDelay=(Math.random()*2)+'s';s.style.color=['#fff','#ff9ecf','#ffeb3b','#7ec8e3'][i%4];stars.appendChild(s);}
+
+// gate logic: only yes or yes
+let dodges=0;
+const yes1=document.getElementById('yes1'), yes2=document.getElementById('yes2'),
+gate=document.getElementById('gate'), quoteBox=document.getElementById('quoteBox'),
+main=document.getElementById('main'), dodgeMsg=document.getElementById('dodge-msg');
+function goQuote(){gate.classList.add('hidden');quoteBox.classList.remove('hidden');pop();}
+yes1.onclick=goQuote;
+yes2.onclick=goQuote;
+// funny dodge first 2 hovers on desktop
+yes2.addEventListener('mouseover',()=>{if(dodges<2 && window.innerWidth>760){dodgeMsg.textContent=['wait— wrong yes! try the other yes!','haha nope! only correct yes allowed!'][dodges];dodges++;yes2.style.transform=`translate(${Math.random()*60-30}px,${Math.random()*20-10}px) rotate(${(Math.random()*10-5)}deg)`;}});
+document.getElementById('proceed').onclick=()=>{quoteBox.classList.add('hidden');main.classList.remove('hidden');window.scrollTo(0,0);burst(180);document.getElementById('date').textContent=new Date().toLocaleDateString();};
+
+// confetti
+const cv=document.getElementById('confetti'),ctx=cv.getContext('2d');let parts=[];
+function resize(){cv.width=innerWidth;cv.height=innerHeight}addEventListener('resize',resize);resize();
+function burst(n){const c=['#ff9ecf','#ffeb3b','#7ec8e3','#b6ff5c','#fff','#d92b2b'];for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*300,y:innerHeight*0.35,vx:(Math.random()-.5)*9,vy:Math.random()*-7-2,g:.22,s:Math.random()*8+3,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.3,c:c[i%c.length],life:120+Math.random()*60});}
+(function loop(){ctx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.life>0);for(let p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.r+=p.vr;p.life--;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);ctx.restore();}requestAnimationFrame(loop);})();
+document.getElementById('cake').onclick=(e)=>{burst(120);pop();tv('★ wish made!! ★\n★ it will come true ★');};
+// tv rotate messages
+const wishes=['▶ you are so loved ♡\n★ happy birthday ★','▶ winter is over!\n★ invincible summer loading...','▶ centipede girl fact:\n★ 100 legs, 0 flaws ★','▶ PRINCE ST → CAKE ST →\n★ follow the sparkles ★'];let wi=0;
+function tv(t){document.getElementById('tvText').innerText=t||wishes[wi++%wishes.length]}
+setInterval(()=>{if(!main.classList.contains('hidden'))tv()},3500);
+// counter
+let c=13+Math.floor(Math.random()*40);try{c=parseInt(localStorage.getItem('bdayCount')||c)+1;localStorage.setItem('bdayCount',c);}catch(e){}
+document.getElementById('counter').textContent=String(c).padStart(6,'0');
+// tiny pop sound with webaudio
+let ac=null;
+function pop(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';o.frequency.value=660;g.gain.value=.08;o.start();o.frequency.exponentialRampToValueAtTime(990,ac.currentTime+.12);o.stop(ac.currentTime+.15);}catch(e){}}
+// birthday tune (happy birthday melody, chiptune)
+let playing=false;
+document.getElementById('musicBtn').onclick=function(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(playing){ac.suspend();playing=false;this.textContent='♪ play bday tune';return;}ac.resume();playing=true;this.textContent='♫ playing... (tap to stop)';const notes=[261.6,261.6,293.7,329.6,329.6,293.7,261.6,392,329.6,329.6,293.7,293.7,261.6,523.2,493.9,329.6,329.6,293.7,440,392,329.6,293.7,261.6];let t=ac.currentTime+.05;notes.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';o.frequency.value=f;g.gain.value=.06;const d=(i%7==6)?.6:.35;o.start(t);o.stop(t+d);t+=d+.02;});setTimeout(()=>{playing=false;document.getElementById('musicBtn').textContent='♪ play again'},t*1000);}catch(e){alert('music blocked by browser ♡ hum it yourself: happy birthday~!');}};
+</script>
+</body>
+</html>
